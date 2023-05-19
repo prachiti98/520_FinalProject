@@ -8,28 +8,32 @@ import time
 from datetime import timedelta
 from models.DAO import DAO
 from models.StudentDAO import StudentDAO
+from models.TransactionDAO import TransactionDAO
+from controllers.index import index_blueprint
+from controllers.about import about_blueprint
+from controllers.student_login import student_login_blueprint
+from controllers.student_register import student_register_blueprint
+from controllers.student_bookslist import student_bookslist_blueprint
+from controllers.student_detail import student_detail_blueprint
 
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
-# Initializing MySQL
-# mysql = MySQL(app)
-
 DAO = DAO(app)
 
-@app.route('/')
-def index():
-    return render_template('home.html')
+
+app.config['dao'] = DAO
 
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+app.register_blueprint(index_blueprint)
+app.register_blueprint(about_blueprint)
+app.register_blueprint(student_login_blueprint)
+app.register_blueprint(student_register_blueprint)
+app.register_blueprint(student_bookslist_blueprint)
+app.register_blueprint(student_detail_blueprint)
 
 # Register Form Class
-
-
 # class RegisterForm(Form):
 #     staffName = StringField("Name", [validators.Length(min=1, max=100)])
 #     staffUsername = StringField(
@@ -68,9 +72,9 @@ def about():
 
 #         return render_template('register.html', form=form)
 
-# # User Login
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
+# User Login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
 #     if request.method == 'POST':
 
 #         # Get form fields
@@ -111,129 +115,7 @@ def about():
 #             error = 'Username not found.'
 #             return render_template('login.html', error=error)
 
-#     return render_template('login.html')
-
-
-# Register Form Class
-class StudentRegisterForm(Form):
-    studentName = StringField("Student Name", [validators.Length(min=1, max=100)])
-    studentUsername = StringField('Username- Student ID number', [validators.Length(min=1, max=25)])
-    email = StringField('Email', [validators.Length(min=1, max=50)])
-    mobile = StringField("Mobile Number", [validators.Length(min=12, max=12)])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords do not match')
-        ])
-    confirm = PasswordField('Confirm Password')
-
-# User Login
-@app.route('/studentlogin', methods=['GET', 'POST'])
-def studentlogin():
-    if request.method == 'POST':
-        
-        #Get form fields
-        studentUsername = request.form['studentUsername']
-        password = request.form['password']
-
-        # # Create Cursor
-        # cur = mysql.connection.cursor()
-
-        # # Get user by Username
-        # result = cur.execute("SELECT * FROM students WHERE studentUsername = %s", [studentUsername])
-
-        student = StudentDAO(DAO)
-        result,cur = student.getUser(studentUsername)
-
-        if result > 0:
-
-            # Get the stored hash
-            data = cur.fetchone()
-            originalPassword = data['password']
-
-
-            # Comparing the Passwords
-            if sha256_crypt.verify(password, originalPassword):
-
-                # Password matched
-                session['logged_in'] = True
-                session['student_logged_in'] = True
-                session['studentUsername'] = studentUsername
-                # session['aadharNo'] = data['aadharNo']
-                
-                flash('You have successfully logged in', 'success')
-                return redirect(url_for('studentbookslist'))
-
-            else:
-                error = 'Invalid login.'
-                return render_template('student_login.html', error = error)
-
-            #Close connection
-            cur.close()
-
-        else:
-            error = 'Username not found.'
-            return render_template('student_login.html', error = error)
-
-    return render_template('student_login.html')
-
-
-@app.route("/studentregister", methods=['GET', 'POST'])
-#User Registration
-def studentregister():
-
-        form = StudentRegisterForm(request.form)
-        if request.method == 'POST' and form.validate():
-            studentName = form.studentName.data
-            email = form.email.data
-            mobile = form.mobile.data
-            studentUsername = form.studentUsername.data
-            password = sha256_crypt.hash(str(form.password.data))
-
-            # # Creating the cursor
-            # cur = mysql.connection.cursor()
-
-            # # print(password)
-
-            # # Executing Query
-            # cur.execute("INSERT INTO students(studentName, email, mobile, studentUsername, password) VALUES(%s, %s, %s, %s, %s)", \
-            #             (studentName, email, mobile, studentUsername, password))
-
-            
-            # # Commit to database
-            # mysql.connection.commit()
-
-            # # Close connection
-            # cur.close()
-            student = StudentDAO(DAO)
-            cur = student.addStudent(studentName,email,mobile,studentUsername,password)
-            flash("You are now registered.", 'success')
-
-            return redirect(url_for('studentlogin'))
-
-        return render_template('student_register.html', form= form )
-
-# Creating the Books list
-@app.route('/studentbookslist')
-def studentbookslist():
-    
-    # # Create Cursor
-    # cur = mysql.connection.cursor()
-
-    # # Execute
-    # result = cur.execute("SELECT bookName, sum(available) AS count FROM books GROUP BY bookName")
-
-    student = StudentDAO(DAO)
-    result,cur = student.getBooks()
-    books = cur.fetchall()
-
-    if result > 0:
-        return render_template('student_bookslist.html', books = books)
-    else:
-        msg = 'No books found'
-        return render_template('student_bookslist.html', msg= msg)
-
-    # Close connection
-    cur.close()
+    return render_template('login.html')
 
 # Check if user logged in
 def is_logged_in(f):
@@ -245,31 +127,6 @@ def is_logged_in(f):
             flash('Unauthorized, please Login.', 'danger')
             return redirect(url_for('login'))
     return wrap
-
-# # Personal Details
-# @app.route('/student_detail')
-# @is_logged_in
-# def student_detail():
-#     # Create Cursor
-#     cur = mysql.connection.cursor()
-
-#     # Execute
-#     result = cur.execute("SELECT * FROM transactions WHERE studentUsername = %s", (session['studentUsername'], )) 
-
-#     transactions = cur.fetchall()
-#     fine_result = cur.execute("select fine from transactions where studentUsername like %s",(session['studentUsername'], ))
-#     fine=cur.fetchone()
-    
-#     if result > 0 and fine_result > 0:
-#         return render_template('student_detail.html', transactions = transactions,fine=fine['fine'])
-#     elif result > 0:
-#         return render_template('student_detail.html', transactions = transactions,fine=0)
-#     else:
-#         msg = 'No recorded transactions'
-#         return render_template('student_detail.html', msg= msg)
-
-#     # Close connection
-#     cur.close()
 
 # # Creating the Books list
 # @app.route('/bookslist', methods=['GET', 'POST'])
