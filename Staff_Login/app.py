@@ -118,6 +118,7 @@ def login():
     return render_template('login.html')
 
 # Check if user logged in
+#use the one in controllers.index and remove from here
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
