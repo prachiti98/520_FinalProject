@@ -25,6 +25,14 @@ class DBDAO(object):
 			q = q.replace("@table", self.table)
 		pass_flag = h.execute(q)
 		return pass_flag,h
+
+	def query_data(self, q):
+		h = self.cur()
+		if (len(self.table)>0):
+			q = q.replace("@table", self.table)
+		pass_flag = h.execute(q)
+		result = h.fetchall() 
+		return result,pass_flag
 	
 	def commit(self):
 		self.query("COMMIT;")
