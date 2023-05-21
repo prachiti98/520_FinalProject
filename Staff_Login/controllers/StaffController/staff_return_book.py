@@ -56,7 +56,7 @@ def return_books():
                     diff = datetime.datetime.strptime(current_time, datetimeFormat)\
             - datetime.datetime.strptime(returndate, datetimeFormat)
                 flash('Book Returned', 'success')
-                return redirect(url_for('bookslist'))
+                return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
             else:
                 flash('Book already returned', 'success')
                 return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
