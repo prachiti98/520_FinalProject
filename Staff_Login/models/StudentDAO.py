@@ -10,5 +10,9 @@ class StudentDAO():
 	def getUser(self,studentUsername):
 		result,h = self.db.query("SELECT * FROM students WHERE studentUsername = '{}'".format(studentUsername))
 		return result,h
+
+	def get_all_users(self):
+		result,h = self.db.query_data("SELECT studentUsername FROM students")
+		return result,h
 	
         
