@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<body background = "{{ url_for('static', filename='images/finePage.jpg')}}" opacity= 0.2></body>
 <h1>Pay Fine</h1>
 
   {% from "includes/_formhelpers.html" import render_field %}
@@ -15,7 +14,7 @@
       <input type="submit" class="btn btn-primary"  value="Calculate Fine">
       <br>
       <br>
-      <strong>Student has a pending of Rs.{{data.fine}}</strong> <br>
+      <strong>Student has a pending fine of ${{data.fine}}</strong> <br>
       <br>
   
       Enter the amount paid by the student
@@ -25,7 +24,7 @@
     </div>
   </form>
   <div>
-  <strong>Student paid a fine of Rs.{{newfine}} </strong>
+  <strong>Student paid a fine of ${{newfine}} </strong>
   </div>
   
 {% endblock %}
