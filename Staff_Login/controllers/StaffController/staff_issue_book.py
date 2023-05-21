@@ -8,6 +8,7 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 from models.BookDAO import BookDAO
 from controllers.index import is_logged_in
+from models.TransactionDAO import TransactionDAO
 
 staff_issue_book_blueprint = Blueprint('staff_issue_book_blueprint', __name__)
 
@@ -24,6 +25,7 @@ class IssueForm(Form):
 def issue_books(bookName):
     DAO = current_app.config['dao']
     book = BookDAO(DAO)
+    transaction = TransactionDAO(DAO)
     result,h = book.get_issue_book(bookName)
     form = IssueForm(request.form)
     form.bookName.data = bookName
@@ -31,7 +33,8 @@ def issue_books(bookName):
         student_id = form.studentUsername.data
         staff_id = form.staffUsername.data
         bookName = form.bookName.data
-        book.issue_book(result)
+        book.issue_book(result[0])
+        transaction.issue_book(student_id,session['staffUsername'], bookName,result[0]['book_id'])
         flash('Book Issued', 'success')
         return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
     return render_template('issue_books.html', form=form)
