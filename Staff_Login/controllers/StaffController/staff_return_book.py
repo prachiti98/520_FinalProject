@@ -11,6 +11,7 @@ import datetime
 import time
 from datetime import timedelta
 from models.TransactionDAO import TransactionDAO
+from models.StudentDAO import StudentDAO
 
 staff_return_book_blueprint = Blueprint('staff_return_book_blueprint', __name__)
 
@@ -26,40 +27,50 @@ def return_books():
     DAO = current_app.config['dao']
     book = BookDAO(DAO)
     transaction = TransactionDAO(DAO)
+    student = StudentDAO(DAO)
     result,pass_flag  = book.unavailable_books()    
     form = ReturnForm(request.form)
+    all_users = student.get_all_users()
+    all_users = [item['studentUsername'] for item in all_users[0]]
+    
     if pass_flag > 0:
         if request.method == 'POST' and form.validate():
             student_id = form.studentUsername.data
-            book_name = form.book_name.data
-            data,h = transaction.getBook(student_id,book_name)
-            if h > 0:
-                book_id = data[0]['book_id']
-                #Set book as availble
-                book.set_availble(book_id)
-                #Complete transaction
-                transaction.update_transaction(student_id,book_id)
-                return_date,h = transaction.get_return_date(student_id,book_id)
-                data = return_date
-                returndate = str(data[0]['returnDate'])
-                current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
-                if current_time > returndate:
-                    returndate = time.strftime(returndate)
-                    datetimeFormat = '%Y-%m-%d %H:%M:%S'
-                    diff = datetime.datetime.strptime(current_time, datetimeFormat)\
-            - datetime.datetime.strptime(returndate, datetimeFormat)
-                    amount_to_be_added_to_fine = (diff.days)*10
-                    transaction.update_fine(student_id,amount_to_be_added_to_fine)
+            if student_id in all_users:
+                book_name = form.book_name.data
+                data,h = transaction.getBook(student_id,book_name)
+                if h > 0:
+                    book_id = data[0]['book_id']
+                    #Set book as availble
+                    book.set_availble(book_id)
+                    #Complete transaction
+                    transaction.update_transaction(student_id,book_id)
+                    return_date,h = transaction.get_return_date(student_id,book_id)
+                    data = return_date
+                    transaction_id = str(data[0]['transaction_id'])
+                    returndate = str(data[0]['returnDate'])
+                    current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
+                    if current_time > returndate:
+                        returndate = time.strftime(returndate)
+                        datetimeFormat = '%Y-%m-%d %H:%M:%S'
+                        diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+                - datetime.datetime.strptime(returndate, datetimeFormat)
+                        amount_to_be_added_to_fine = (diff.days)*10
+                        transaction.update_fine(student_id,amount_to_be_added_to_fine)
+                    else:
+                        returndate = time.strftime(returndate)
+                        datetimeFormat = '%Y-%m-%d %H:%M:%S'
+                        diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+                - datetime.datetime.strptime(returndate, datetimeFormat)
+                    flash('Book Returned', 'success')
+                    #transaction.update_return_date(current_time,student_id,transaction_id)
+                    return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
                 else:
-                    returndate = time.strftime(returndate)
-                    datetimeFormat = '%Y-%m-%d %H:%M:%S'
-                    diff = datetime.datetime.strptime(current_time, datetimeFormat)\
-            - datetime.datetime.strptime(returndate, datetimeFormat)
-                flash('Book Returned', 'success')
-                return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
+                    flash('Book already returned', 'success')
+                    return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
             else:
-                flash('Book already returned', 'success')
-                return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
+                error = 'Invalid username'
+                return render_template('return_books.html', form=form, books=result, error = error)
     else:
         flash('No books found', 'success')
     return render_template('return_books.html', form=form, books=result)
