@@ -6,25 +6,29 @@ from functools import wraps
 import datetime
 import time
 from datetime import timedelta
-from models.DAO import DAO
+from models.DBDAO import DBDAO
 from models.StudentDAO import StudentDAO
 from models.TransactionDAO import TransactionDAO
 from controllers.index import index_blueprint
 from controllers.about import about_blueprint
-from controllers.student_login import student_login_blueprint
-from controllers.student_register import student_register_blueprint
-from controllers.student_bookslist import student_bookslist_blueprint
-from controllers.student_detail import student_detail_blueprint
+from controllers.StudentController.student_login import student_login_blueprint
+from controllers.StudentController.student_register import student_register_blueprint
+from controllers.StudentController.student_bookslist import student_bookslist_blueprint
+from controllers.StudentController.student_detail import student_detail_blueprint
+
+from controllers.StaffController.staff_login import staff_login_blueprint
+from controllers.StaffController.staff_bookslist import staff_bookslist_blueprint
+from controllers.StaffController.staff_add_book import staff_add_book_blueprint
+from controllers.StaffController.staff_return_book import staff_return_book_blueprint
+
 
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
-DAO = DAO(app)
-
+DAO = DBDAO(app)
 
 app.config['dao'] = DAO
-
 
 app.register_blueprint(index_blueprint)
 app.register_blueprint(about_blueprint)
@@ -32,6 +36,13 @@ app.register_blueprint(student_login_blueprint)
 app.register_blueprint(student_register_blueprint)
 app.register_blueprint(student_bookslist_blueprint)
 app.register_blueprint(student_detail_blueprint)
+
+
+app.register_blueprint(staff_login_blueprint)
+app.register_blueprint(staff_bookslist_blueprint)
+app.register_blueprint(staff_add_book_blueprint)
+app.register_blueprint(staff_return_book_blueprint)
+
 
 # Register Form Class
 # class RegisterForm(Form):
@@ -418,4 +429,4 @@ def logout():
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'
-    app.run(debug=True)
+    app.run(debug=True,port=8080)
