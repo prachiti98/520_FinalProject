@@ -35,4 +35,4 @@ def staff_register():
             staff.add_staff(staffName, staffUsername, password)
             flash("You are now registered.", 'success')
             return redirect(url_for('staff_login_blueprint.stafflogin'))
-        return render_template('register.html', form=form)
+        return render_template('staff_register.html', form=form)
