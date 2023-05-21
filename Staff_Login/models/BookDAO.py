@@ -24,11 +24,13 @@ class BookDAO():
     
 
     def get_issue_book(self,bookName):
-        result,h = self.db.query("SELECT * FROM @table WHERE bookName = {} AND available = 1 LIMIT 1".format(bookName)) 
+        print("SELECT * FROM @table WHERE bookName = {} AND available = 1 LIMIT 1".format(bookName))
+        result,h = self.db.query_data("SELECT * FROM @table WHERE bookName = '{}' AND available = 1 LIMIT 1".format(bookName)) 
         return result,h
     
     def issue_book(self,book):
         self.db.query("UPDATE @table SET available = 0 WHERE book_id = "+str(book['book_id'])+"")
+        self.db.commit()
 
     def set_availble(self,book_id):
         self.db.query("UPDATE @table SET available = 1 where book_id = "+str(book_id)+" ")
