@@ -42,5 +42,15 @@ class TransactionDAO():
 		return result,h
 	
 	def update_fine(self,newfine,student_id):
-		self.db.query("update transactions set fine="+str(newfine) +" where studentUsername="+str(student_id)+" ")
+		self.db.query("UDPATE transactions SET fine="+str(newfine) +" where studentUsername='"+str(student_id)+"' ")
 		self.db.commit()
+
+	def analyse_data(self):
+		result,h = self.db.query_data("SELECT studentUsername,count(*) as num FROM transactions GROUP BY studentUsername ORDER BY fine  desc, num desc limit 5")
+		return result,h
+
+	def update_return_date(self,return_date,student_id,transaction_id):
+		self.db.query("UPDATE transactions SET returnDate='"+str(return_date) +"' where studentUsername='"+str(student_id)+"' AND transaction_id  "+str(transaction_id))
+		self.db.commit()
+
+
