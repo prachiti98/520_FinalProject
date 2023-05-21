@@ -1,39 +1,46 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <div class="container">
-    <h1 class="text-center">Student Register</h1>
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 87vh;
+  }
 
-    {% from "includes/_formhelpers.html" import render_field %}
+  .form-group input {
+    width: 300px;
+  }
+</style>
 
-    <form method="POST" action="">
-      <div class="form-group">
-        <label for="{{ form.studentName.id }}">Student Name</label>
-        {{ render_field(form.studentName, class_="form-control", placeholder="Enter your name") }}
-      </div>
-      <div class="form-group">
-        <label for="{{ form.email.id }}">Email</label>
-        {{ render_field(form.email, class_="form-control", placeholder="Enter your email") }}
-      </div>
-      <div class="form-group">
-        <label for="{{ form.mobile.id }}">Mobile</label>
-        {{ render_field(form.mobile, class_="form-control", placeholder="Enter your mobile number") }}
-      </div>
-      <div class="form-group">
-        <label for="{{ form.studentUsername.id }}">Username</label>
-        {{ render_field(form.studentUsername, class_="form-control", placeholder="Enter your username") }}
-      </div>
-      <div class="form-group">
-        <label for="{{ form.password.id }}">Password</label>
-        {{ render_field(form.password, class_="form-control", placeholder="Enter your password") }}
-      </div>
-      <div class="form-group">
-        <label for="{{ form.confirm.id }}">Confirm Password</label>
-        {{ render_field(form.confirm, class_="form-control", placeholder="Confirm your password") }}
-      </div>
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
-  </div>
+<div class="container">
+  <h1>Student Register</h1>
+  {% from "includes/_formhelpers.html" import render_field %}
+  <body style="background-image: url('https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');">
+  <form method="POST" action="">
+    <div class="form-group">
+      {{ render_field(form.studentName, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.email, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.mobile, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.studentUsername, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.password, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.confirm, class_="form-control") }}
+    </div>
+    <p>
+      <input type="submit" class="btn btn-primary" value="Submit">
+    </p>
+  </form>
+</div>
 {% endblock %}
