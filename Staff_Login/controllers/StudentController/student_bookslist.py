@@ -6,6 +6,7 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 from models.StudentDAO import StudentDAO
+from models.BookDAO import BookDAO
 
 
 student_bookslist_blueprint = Blueprint('student_bookslist_blueprint', __name__)
@@ -13,10 +14,9 @@ student_bookslist_blueprint = Blueprint('student_bookslist_blueprint', __name__)
 # Creating the Books list
 @student_bookslist_blueprint.route('/studentbookslist')
 def studentbookslist():
-    
     DAO = current_app.config['dao']
-    student = StudentDAO(DAO)
-    result,cur = student.getBooks()
+    book = BookDAO(DAO)
+    result,cur = book.getBooks()
     books = cur.fetchall()
 
     if result > 0:
@@ -24,6 +24,3 @@ def studentbookslist():
     else:
         msg = 'No books found'
         return render_template('student_bookslist.html', msg= msg)
-
-    # Close connection
-    cur.close()

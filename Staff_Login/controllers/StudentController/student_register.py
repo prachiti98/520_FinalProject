@@ -6,7 +6,7 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 from models.StudentDAO import StudentDAO
-from controllers.student_login import student_login_blueprint
+from controllers.StudentController.student_login import student_login_blueprint
 
 
 student_register_blueprint = Blueprint('student_register_blueprint', __name__)

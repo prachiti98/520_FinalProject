@@ -5,7 +5,7 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 from flask import Blueprint,current_app
 from models.StudentDAO import StudentDAO
-from controllers.student_bookslist import student_bookslist_blueprint
+from controllers.StaffController.staff_bookslist import staff_bookslist_blueprint
 
 student_login_blueprint = Blueprint('student_login_blueprint', __name__)
 
