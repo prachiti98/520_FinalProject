@@ -30,6 +30,17 @@ class TransactionDAO():
 	def issue_book(self,student_id,staffUsername,bookName,book_id):
 		query = "INSERT INTO transactions (studentUsername, staffUsername, bookName, book_id) VALUES ('{}', '{}', '{}', {})"
 		formatted_query = query.format(student_id, staffUsername, bookName,book_id)
-		print(formatted_query)
 		self.db.query(formatted_query)   
 		self.db.commit()     
+
+	def get_all_fines(self):
+		result,h = self.db.query_data("SELECT studentUsername, fine  FROM transactions where fine > 0 GROUP BY studentusername,fine")         
+		return result,h
+
+	def get_fine(self,student_id):
+		result,h = self.db.query_data("SELECT fine FROM transactions where studentUsername='"+str(student_id)+"' ")         
+		return result,h
+	
+	def update_fine(self,newfine,student_id):
+		self.db.query("update transactions set fine="+str(newfine) +" where studentUsername="+str(student_id)+" ")
+		self.db.commit()
