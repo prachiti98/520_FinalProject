@@ -1,19 +1,21 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<body background = "https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"></body>
-  <h1>Login</h1>
+  <div class="container">
+    <h1 class="text-center">Login</h1>
 
-  <form method="POST" action="">
-    <div class="form-group">
-      <label> Username </label>
-      <input type="username" name="staffUsername" class="form-control" value={{request.form.staffUsername}}>
-    </div>
-    <div class="form-group">
-      <label> Password </label>
-      <input type="password" name="password" class="form-control" value={{request.form.password}}>
-    </div>
-    <button type="submit" class="btn btn-primary"> Submit </button>
-  </form>
-
+    <form method="POST" action="">
+      <div class="form-group">
+        <label for="staffUsername">Username</label>
+        <input type="text" name="staffUsername" id="staffUsername" class="form-control" value="{{ request.form.staffUsername }}" placeholder="Enter your username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control" value="{{ request.form.password }}" placeholder="Enter your password">
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}

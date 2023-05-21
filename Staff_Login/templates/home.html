@@ -2,11 +2,10 @@
 
 {% block body %}
 <body background = "https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"></body>
-<div class="jumbotron text-center">
-  <h1>Welcome to Library Management System</h1>
-
+<div class="jumbotron text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%;">
+  <h1>Welcome to the Library Management System</h1>
   {% if session.logged_in == NULL %}
+    <p class="lead">Please log in to access the system.</p>
   {% endif %}
-
 </div>
 {% endblock %}
