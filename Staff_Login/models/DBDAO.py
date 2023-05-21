@@ -1,15 +1,38 @@
-from copy import copy
+from flask_mysqldb import MySQL
 
-# from Models.BookDAO import BookDAO
-from models.StudentDAO import StudentDAO
-# from Models.AdminDAO import AdminDAO
+class DBDAO(object):
+	"""Initialize mysql database """
+	host = "localhost"
+	user = "root"
+	password = "msb1998"
+	database = "library"
+	table = ""
 
-from models.DB import DB
-
-class DBDAO(DB):
 	def __init__(self, app):
-		super(DBDAO, self).__init__(app)
+		app.config["MYSQL_HOST"] = self.host
+		app.config["MYSQL_USER"] = self.user
+		app.config["MYSQL_PASSWORD"] = self.password
+		app.config["MYSQL_DB"] = self.database
+		app.config["MYSQL_CURSORCLASS"] = 'DictCursor'
+		self.mysql = MySQL(app)
 
-		# self.book = BookDAO(copy(self))
-		self.student = StudentDAO(copy(self))
-		# self.admin = AdminDAO(copy(self))
+	def cur(self):
+		return self.mysql.connection.cursor()
+
+	def query(self, q):
+		h = self.cur()
+		if (len(self.table)>0):
+			q = q.replace("@table", self.table)
+		pass_flag = h.execute(q)
+		return pass_flag,h
+
+	def query_data(self, q):
+		h = self.cur()
+		if (len(self.table)>0):
+			q = q.replace("@table", self.table)
+		pass_flag = h.execute(q)
+		result = h.fetchall() 
+		return result,pass_flag
+	
+	def commit(self):
+		self.query("COMMIT;")
