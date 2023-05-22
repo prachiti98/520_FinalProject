@@ -7,8 +7,6 @@ from flask import Blueprint,current_app
 from models.StaffDAO import StaffDAO
 from controllers.StudentController.student_bookslist import student_bookslist_blueprint
 
-from models.TransactionDAO import TransactionDAO
-
 staff_login_blueprint = Blueprint('staff_login_blueprint', __name__)
 
 # User Login
