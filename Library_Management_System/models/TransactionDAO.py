@@ -1,13 +1,14 @@
 class TransactionDAO():
 	def __init__(self, DAO):
 		self.db = DAO
+		self.db.table = "books"
 		
 	def getUser(self,studentUsername):
 		result,h = self.db.query("SELECT * FROM transactions WHERE studentUsername = '{}'".format(studentUsername))
 		return result,h
 	
 	def getFine(self,studentUsername):
-		result,h = self.db.query("SELECT transaction_id, fine FROM transactions WHERE studentUsername = '{}'".format(studentUsername))
+		result,h = self.db.query("SELECT SUM(fine) AS fine FROM transactions WHERE studentUsername = '{}' GROUP BY studentUsername".format(studentUsername))
 		return result,h
 	
 	def getBook(self,student_id,book_name):
@@ -29,11 +30,11 @@ class TransactionDAO():
 	def issue_book(self,student_id,staffUsername,bookName,book_id):
 		query = "INSERT INTO transactions (studentUsername, staffUsername, bookName, book_id) VALUES ('{}', '{}', '{}', {})"
 		formatted_query = query.format(student_id, staffUsername, bookName,book_id)
-		self.db.query_data(formatted_query)   
+		self.db.query(formatted_query)   
 		self.db.commit()     
 
 	def get_all_fines(self):
-		result,h = self.db.query_data("SELECT studentUsername, fine  FROM transactions where fine > 0 GROUP BY studentusername,fine")         
+		result,h = self.db.query_data("SELECT studentUsername, SUM(fine) AS fine  FROM transactions where fine > 0 GROUP BY studentusername")         
 		return result,h
 
 	def get_fine(self,student_id):
