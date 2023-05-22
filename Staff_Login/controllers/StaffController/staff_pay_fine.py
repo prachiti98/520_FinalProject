@@ -22,6 +22,7 @@ def pay_fine():
     total_paid = 0
     data = 0
     fee_exist = 0
+    amountpaid  = 0
     DAO = current_app.config['dao']
     transaction = TransactionDAO(DAO)
     if request.method == 'POST' and form.validate():
@@ -34,7 +35,6 @@ def pay_fine():
             fee_exist = 1
             if amountpaid:
                 if amountpaid>t['fine']:
-                    print('more')
                     transaction.update_fine(0,t['transaction_id'])
                     amountpaid-=t['fine']
                 else:
