@@ -7,7 +7,7 @@ class TransactionDAO():
 		return result,h
 	
 	def getFine(self,studentUsername):
-		result,h = self.db.query("SELECT fine FROM transactions WHERE studentUsername = '{}'".format(studentUsername))
+		result,h = self.db.query("SELECT transaction_id, fine FROM transactions WHERE studentUsername = '{}'".format(studentUsername))
 		return result,h
 	
 	def getBook(self,student_id,book_name):
@@ -29,7 +29,7 @@ class TransactionDAO():
 	def issue_book(self,student_id,staffUsername,bookName,book_id):
 		query = "INSERT INTO transactions (studentUsername, staffUsername, bookName, book_id) VALUES ('{}', '{}', '{}', {})"
 		formatted_query = query.format(student_id, staffUsername, bookName,book_id)
-		self.db.query(formatted_query)   
+		self.db.query_data(formatted_query)   
 		self.db.commit()     
 
 	def get_all_fines(self):
