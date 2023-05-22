@@ -1,34 +1,33 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class= "bg" >
-    <h1>Return Books</h1>
+<div class="bg">
+  <h1>Student Fines</h1>
 
   <div class="container">
-
-  <hr>
-
-    <div class="row">
+    <div>
       <div class="col-12 text-center">
-        <a class="btn btn-success " href="/issue_books"> Issue books </a>
-        <a class="btn btn-success " href="/return_books"> Return books </a>
-        <a class="btn btn-success " href="/pay_fine"> Pay Fine </a>
+        <a class="btn btn-primary" href="/pay_fine">Pay Fine</a>
       </div>
     </div>
-  <table class="table table-hover table-stripped">
-    <tr>
-      <th>Student Username</th>
-      <th>FINE</th>
-    </tr>
-<!-- fine for each - button -->
-    {% for book in books %}
-      <tr>
-        <td>{{book.studentUsername}}</td>
-        <td>{{book.fine}}</td>
-      </tr>
-    {% endfor %}
+    <br>
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Student Username</th>
+          <th>Fine</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+          <tr>
+            <td>{{ book.studentUsername }}</td>
+            <td>{{ book.fine }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-  </table>
   </div>
 </div>
 {% endblock %}
