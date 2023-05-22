@@ -1,7 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
+<style>
+  .jumbotron {
+    opacity: 90%;
+    border-radius: 1rem;
+  }
+</style>
 <body background="{{ url_for('static',filename='images/lib.jpeg') }}">
 
 <div class="jumbotron text-center">
