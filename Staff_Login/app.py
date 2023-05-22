@@ -16,6 +16,7 @@ from controllers.StaffController.staff_issue_book import staff_issue_book_bluepr
 from controllers.StaffController.staff_check_fine import staff_check_fine_blueprint
 from controllers.StaffController.staff_pay_fine import staff_pay_fine_blueprint
 from controllers.StaffController.staff_analyse_book import staff_analyse_book_blueprint
+from controllers.StaffController.staff_search_book import staff_search_book_blueprint
 
 app = Flask(__name__)
 
@@ -40,6 +41,7 @@ app.register_blueprint(staff_check_fine_blueprint)
 app.register_blueprint(staff_pay_fine_blueprint)
 app.register_blueprint(staff_analyse_book_blueprint)
 app.register_blueprint(staff_register_blueprint)
+app.register_blueprint(staff_search_book_blueprint)
 
 # User Login
 @app.route('/staff_login', methods=['GET', 'POST'])

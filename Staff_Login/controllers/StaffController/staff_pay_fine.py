@@ -12,8 +12,8 @@ from models.TransactionDAO import TransactionDAO
 staff_pay_fine_blueprint = Blueprint('staff_pay_fine', __name__)
 
 class GetUsernameForm(Form):
-    studentUsername = StringField("Student ID number", [validators.Length(min=1)])
-    amountpaid = StringField("Student ID number")
+    studentUsername = StringField("Student Username", [validators.Length(min=1)])
+    amountpaid = StringField("Username")
 
 @staff_pay_fine_blueprint.route('/pay_fine', methods=['GET', 'POST'])
 @is_logged_in
