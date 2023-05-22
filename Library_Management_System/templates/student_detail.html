@@ -1,16 +1,24 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<style>
+  .table {
+    border: 1px solid #dee2e6;;
+  }
+  .table .thead-dark th {
+    color: #000;
+    background-color: #e9ecef;
+    border-color: #e9ecef;
+  }
+</style>
 <body background = "{{ url_for('static', filename='images/try.jpeg')}}" background-size:100px 100px;></body>
-  <h1> Welcome {{session.studentUsername}} </h1>
+  <h1 style="text-align: center;"> Welcome {{session.studentUsername}}! </h1>
 
-  <hr>
+  <br><br>
 
-  <h4>Your pending fine is {{fine}}</h4>
+  <h4 style="font-weight: 400;">Your pending fine is: ${{fine}}</h4>
 
-  <hr>
-
-  <br>
+  <br><br>
 
   <table class="table table-hover table-stripped">
     <thead class="thead-dark">
