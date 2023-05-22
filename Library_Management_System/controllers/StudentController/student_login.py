@@ -35,6 +35,7 @@ def studentlogin():
                 session['logged_in'] = True
                 session['student_logged_in'] = True
                 session['studentUsername'] = studentUsername
+                session['role'] = 'student'
                 # session['aadharNo'] = data['aadharNo']
                 
                 flash('You have successfully logged in', 'success')
