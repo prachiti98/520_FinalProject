@@ -7,13 +7,14 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 from models.BookDAO import BookDAO
 from controllers.index import is_logged_in
+from wtforms.validators import DataRequired,NumberRange
 
 staff_add_book_blueprint = Blueprint('staff_add_book_blueprint', __name__)
 
 class AddBooksForm(Form):
-    bookName = StringField("Name of the book to be added")
-    author = StringField("Name of the Author")
-    quantity = IntegerField("Enter the quantity to be added")
+    bookName = StringField("Name of the book to be added", validators=[DataRequired()])
+    author = StringField("Name of the Author", validators=[DataRequired()])
+    quantity = IntegerField("Enter the quantity to be added", validators=[DataRequired(), NumberRange(min=1)])
 
 @staff_add_book_blueprint.route('/add_books', methods=['GET', 'POST'])
 @is_logged_in('staff')

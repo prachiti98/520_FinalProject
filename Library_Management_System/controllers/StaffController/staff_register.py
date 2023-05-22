@@ -37,7 +37,15 @@ def staff_register():
             #Encrypt data
             password = sha256_crypt.encrypt(str(form.password.data))
             #Register staff
-            staff.add_staff(staffName, staffUsername, password)
-            flash("You are now registered.", 'success')
+            result = 0
+            try:
+                staff.add_staff(staffName, staffUsername, password)
+                result = 1
+            except:
+                 pass
+            if result>0:
+                flash("You are now registered.", 'success')
+            else:
+                flash("Username already present. Use a different Username.", 'danger')
             return redirect(url_for('staff_login_blueprint.stafflogin'))
         return render_template('staff_register.html', form=form)

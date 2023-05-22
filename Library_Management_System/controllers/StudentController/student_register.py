@@ -8,15 +8,18 @@ from functools import wraps
 from models.StudentDAO import StudentDAO
 from controllers.StudentController.student_login import student_login_blueprint
 
-
 student_register_blueprint = Blueprint('student_register_blueprint', __name__)
 
-
+def validate_email(form, field):
+    email = field.data
+    if '@' not in email:
+        raise validators.ValidationError('Invalid email address')
+    
 # Register Form Class
 class StudentRegisterForm(Form):
     studentName = StringField("Student Name", [validators.Length(min=1, max=100)])
     studentUsername = StringField('Student Username', [validators.Length(min=1, max=25)])
-    email = StringField('Email', [validators.Length(min=1, max=50)])
+    email = StringField('Email', validators=[validate_email])
     mobile = StringField("Mobile Number", [validators.Length(min=12, max=12)])
     password = PasswordField('Password', [
         validators.DataRequired(),
@@ -36,8 +39,16 @@ def studentregister():
             studentUsername = form.studentUsername.data
             password = sha256_crypt.hash(str(form.password.data))
             student = StudentDAO(DAO)
-            cur = student.addStudent(studentName,email,mobile,studentUsername,password)
-            flash("You are now registered.", 'success')
+            result = 0
+            try:
+                cur = student.addStudent(studentName,email,mobile,studentUsername,password)
+                result = 1
+            except:
+                 pass
+            if result>0:
+                flash("You are now registered.", 'success')
+            else:
+                flash("Username already present. Use a different Username.", 'danger')
 
             return redirect(url_for('student_login_blueprint.studentlogin'))
 
