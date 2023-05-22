@@ -10,7 +10,7 @@ from controllers.StaffController.staff_login import staff_login_blueprint
 from models.StaffDAO import StaffDAO
 
 class RegisterForm(Form):
-    staffName = StringField("Name", [validators.Length(min=1, max=100)])
+    staffName = StringField("Staff Name", [validators.Length(min=1, max=100)])
     staffUsername = StringField(
         'Staff Username', [validators.Length(min=1, max=100)])
     password = PasswordField('Password', [

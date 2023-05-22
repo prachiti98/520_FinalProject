@@ -38,15 +38,19 @@ class TransactionDAO():
 		return result,h
 
 	def get_fine(self,student_id):
-		result,h = self.db.query_data("SELECT fine FROM transactions where studentUsername='"+str(student_id)+"' ")         
+		result,h = self.db.query_data("SELECT studentUsername,SUM(fine) AS fine FROM transactions where studentUsername='"+str(student_id)+"' GROUP BY studentUsername")         
+		return result,h
+
+	def get_fine_transactions(self,student_id):
+		result,h = self.db.query_data("SELECT transaction_id,studentUsername,fine FROM transactions where fine>0")         
 		return result,h
 	
-	def update_fine(self,newfine,student_id):
-		self.db.query("UDPATE transactions SET fine="+str(newfine) +" where studentUsername='"+str(student_id)+"' ")
+	def update_fine(self,newfine,transaction_id):
+		self.db.query("UPDATE transactions SET fine="+str(newfine) +" where transaction_id='"+str(transaction_id)+"' ")
 		self.db.commit()
 
 	def analyse_data(self):
-		result,h = self.db.query_data("SELECT studentUsername,count(*) as num FROM transactions GROUP BY studentUsername ORDER BY fine  desc, num desc limit 5")
+		result,h = self.db.query_data("SELECT studentUsername,count(*) as 'num' FROM transactions GROUP BY studentUsername")
 		return result,h
 
 	def update_return_date(self,return_date,student_id,transaction_id):
