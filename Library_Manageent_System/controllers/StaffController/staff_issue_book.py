@@ -2,9 +2,7 @@
 from flask.templating import render_template
 from flask import Blueprint,current_app
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
-from passlib.hash import sha256_crypt
 from functools import wraps
 from models.BookDAO import BookDAO
 from controllers.index import is_logged_in
@@ -21,6 +19,7 @@ class IssueForm(Form):
 @is_logged_in
 def issue_books(bookName):
     DAO = current_app.config['dao']
+    #Getting various data access objects
     book = BookDAO(DAO)
     student = StudentDAO(DAO)
     transaction = TransactionDAO(DAO)
@@ -28,11 +27,12 @@ def issue_books(bookName):
     form = IssueForm(request.form)
     form.bookName.data = bookName
     all_users = student.get_all_users()
+    #Get all users to check later if present
     all_users = [item['studentUsername'] for item in all_users[0]]
     if request.method == 'POST' and form.validate():
         student_id = form.studentUsername.data
+        #Check if user is present
         if student_id in all_users:
-            #Need to check if student id is there or not
             bookName = form.bookName.data
             book.issue_book(result[0])
             transaction.issue_book(student_id,session['staffUsername'], bookName,result[0]['book_id'])

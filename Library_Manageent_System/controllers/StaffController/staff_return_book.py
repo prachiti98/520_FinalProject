@@ -3,13 +3,11 @@ from flask import Blueprint,current_app
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField
-from passlib.hash import sha256_crypt
 from functools import wraps
 from models.BookDAO import BookDAO
 from controllers.index import is_logged_in
 import datetime
 import time
-from datetime import timedelta
 from models.TransactionDAO import TransactionDAO
 from models.StudentDAO import StudentDAO
 
@@ -24,18 +22,22 @@ class ReturnForm(Form):
 @staff_return_book_blueprint.route('/return_books', methods=['GET', 'POST'])
 @is_logged_in
 def return_books():
+    #Getting various data access objects
     DAO = current_app.config['dao']
     book = BookDAO(DAO)
     transaction = TransactionDAO(DAO)
     student = StudentDAO(DAO)
     result,pass_flag  = book.unavailable_books()    
     form = ReturnForm(request.form)
+    #Get all users to check later if present
     all_users = student.get_all_users()
     all_users = [item['studentUsername'] for item in all_users[0]]
     
+    #Check if return is possible
     if pass_flag > 0:
         if request.method == 'POST' and form.validate():
             student_id = form.studentUsername.data
+            #Check if user is present
             if student_id in all_users:
                 book_name = form.book_name.data
                 data,h = transaction.getBook(student_id,book_name)
@@ -47,23 +49,24 @@ def return_books():
                     transaction.update_transaction(student_id,book_id)
                     return_date,h = transaction.get_return_date(student_id,book_id)
                     data = return_date
-                    transaction_id = str(data[0]['transaction_id'])
                     returndate = str(data[0]['returnDate'])
                     current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
+                    #Check if the current date is > return date. If it is then add fine.
                     if current_time > returndate:
                         returndate = time.strftime(returndate)
                         datetimeFormat = '%Y-%m-%d %H:%M:%S'
                         diff = datetime.datetime.strptime(current_time, datetimeFormat)\
                 - datetime.datetime.strptime(returndate, datetimeFormat)
                         amount_to_be_added_to_fine = (diff.days)*10
+                        #Update the fine
                         transaction.update_fine(student_id,amount_to_be_added_to_fine)
                     else:
                         returndate = time.strftime(returndate)
                         datetimeFormat = '%Y-%m-%d %H:%M:%S'
                         diff = datetime.datetime.strptime(current_time, datetimeFormat)\
                 - datetime.datetime.strptime(returndate, datetimeFormat)
+                    #Return the book after adding the fine
                     flash('Book Returned', 'success')
-                    #transaction.update_return_date(current_time,student_id,transaction_id)
                     return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
                 else:
                     flash('Book already returned', 'success')

@@ -18,13 +18,16 @@ class AddBooksForm(Form):
 @staff_add_book_blueprint.route('/add_books', methods=['GET', 'POST'])
 @is_logged_in
 def add_books():
+    #Getting Book data access object
     DAO = current_app.config['dao']
     book = BookDAO(DAO)
     form = AddBooksForm(request.form)
     if request.method == 'POST' and form.validate():
+        #Get form data
         bookName = form.bookName.data
         author = form.author.data
         quantity = form.quantity.data
+        #Add all the books
         while quantity:
             book.add_book(bookName,author)
             quantity-=1

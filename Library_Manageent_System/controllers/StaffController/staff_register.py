@@ -9,6 +9,7 @@ from controllers.StudentController.student_bookslist import student_bookslist_bl
 from controllers.StaffController.staff_login import staff_login_blueprint
 from models.StaffDAO import StaffDAO
 
+#Register form class
 class RegisterForm(Form):
     staffName = StringField("Staff Name", [validators.Length(min=1, max=100)])
     staffUsername = StringField(
@@ -26,12 +27,16 @@ staff_register_blueprint = Blueprint('staff_register_blueprint', __name__)
 @staff_register_blueprint.route('/staff_register', methods=['GET', 'POST'])
 def staff_register():
         form = RegisterForm(request.form)
+        #Get Staff data access object
         DAO = current_app.config['dao']
         staff = StaffDAO(DAO)
         if request.method == 'POST' and form.validate():
+            #Get form fields
             staffName = form.staffName.data
             staffUsername = form.staffUsername.data
+            #Encrypt data
             password = sha256_crypt.encrypt(str(form.password.data))
+            #Register staff
             staff.add_staff(staffName, staffUsername, password)
             flash("You are now registered.", 'success')
             return redirect(url_for('staff_login_blueprint.stafflogin'))

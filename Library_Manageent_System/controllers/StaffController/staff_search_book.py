@@ -18,8 +18,10 @@ def search_book():
     DAO = current_app.config['dao']
     book = BookDAO(DAO)
     if request.method == 'POST':
+        #Search for the book
         search_text = request.form['search']
         result,cur = book.search_book(search_text )
+        #Display only the search results
         if cur > 0:
             return render_template('staff_bookslist.html', books = result)
         else:
