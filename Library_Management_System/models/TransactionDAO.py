@@ -45,7 +45,7 @@ class TransactionDAO():
 		return result,h
 	
 	def analyse_data(self):
-		result,h = self.db.query_data("SELECT studentUsername,count(*) as 'num' FROM transactions GROUP BY studentUsername")
+		result,h = self.db.query_data("SELECT studentUsername,count(*) AS 'num',sum(fine) AS fine FROM transactions GROUP BY studentUsername")
 		return result,h
 
 	def update_return_date(self,return_date,student_id,transaction_id):

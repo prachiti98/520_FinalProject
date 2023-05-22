@@ -10,9 +10,13 @@ USE library;
 
 CREATE TABLE staff(staff_id INT AUTO_INCREMENT PRIMARY KEY, staffName VARCHAR(100), staffUsername VARCHAR(100), password VARCHAR(150) );
 
+ALTER TABLE library.staff ADD CONSTRAINT student_name_unique UNIQUE (staffUsername);
+
 select * from staff;
 
 CREATE TABLE students(student_id INT PRIMARY KEY AUTO_INCREMENT, studentName VARCHAR(100), email VARCHAR(100),  mobile VARCHAR(12), studentUsername VARCHAR(100), password VARCHAR(1000));
+
+ALTER TABLE library.students ADD CONSTRAINT student_name_unique UNIQUE (studentUsername);
 
 select * from students;
 

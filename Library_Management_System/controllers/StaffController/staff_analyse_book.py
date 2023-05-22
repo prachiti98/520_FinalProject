@@ -16,6 +16,7 @@ def staffAnalyset():
     transaction = TransactionDAO(DAO)
     #Getting the data for analysis
     result,h = transaction.analyse_data()
+    print(result)
     return render_template('analyse.html', data=result)
 
 

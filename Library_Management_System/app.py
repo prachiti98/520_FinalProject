@@ -7,6 +7,7 @@ from controllers.StudentController.student_login import student_login_blueprint
 from controllers.StudentController.student_register import student_register_blueprint
 from controllers.StudentController.student_bookslist import student_bookslist_blueprint
 from controllers.StudentController.student_detail import student_detail_blueprint
+from controllers.StudentController.student_search_book import student_search_book_blueprint
 from controllers.StaffController.staff_login import staff_login_blueprint
 from controllers.StaffController.staff_register import staff_register_blueprint
 from controllers.StaffController.staff_bookslist import staff_bookslist_blueprint
@@ -32,6 +33,7 @@ app.register_blueprint(student_login_blueprint)
 app.register_blueprint(student_register_blueprint)
 app.register_blueprint(student_bookslist_blueprint)
 app.register_blueprint(student_detail_blueprint)
+app.register_blueprint(student_search_book_blueprint)
 #Registering Staff
 app.register_blueprint(staff_login_blueprint)
 app.register_blueprint(staff_bookslist_blueprint)
