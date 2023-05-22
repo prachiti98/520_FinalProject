@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+  }
+
+  .form-group input {
+    width: 300px;
+  }
+</style>
+<body style="background-image: url('https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');">
+  <div class="container">
+    <h1 class="text-center">Student Login</h1>
+    <br>
+
+    <form method="POST" action="">
+      <div class="form-group">
+        <label for="studentUsername">Student Username</label>
+        <input type="text" name="studentUsername" id="studentUsername" class="form-control" value="{{ request.form.studentUsername }}" style="width: 300px;" placeholder="Enter your student ID number">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control" value="{{ request.form.password }}" style="width: 300px;" placeholder="Enter your password">
+      </div>
+      <br>
+      
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</body>
+{% endblock %}

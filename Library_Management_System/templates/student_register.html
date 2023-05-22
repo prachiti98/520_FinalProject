@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 87vh;
+  }
+
+  .form-group input {
+    width: 300px;
+  }
+</style>
+
+<div class="container">
+  <br>
+  <h1>Student Register</h1>
+  <br>
+
+  {% from "includes/_formhelpers.html" import render_field %}
+  <body style="background-image: url('https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');">
+  <form method="POST" action="">
+    <div class="form-group">
+      {{ render_field(form.studentName, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.email, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.mobile, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.studentUsername, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.password, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.confirm, class_="form-control") }}
+    </div>
+    <br>
+
+    <p style="text-align: center;">
+      <input type="submit" class="btn btn-primary" value="Submit">
+    </p>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+<style>
+  body {
+    background-image: url(https://nationaltoday.com/wp-content/uploads/2022/06/5-Return-Borrowed-Books.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .container-return {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bg {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    opacity: 0.7;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+
+  .btn {
+    width: 100px;
+    margin-top: 10px;
+  }
+  h1, label {
+    color: white;
+  }
+  .form {
+    text-align: center;
+  }
+
+</style>
+  <div class="container-return">
+    <h1 style="text-align: center;">Return Books</h1>
+
+    {% from "includes/_formhelpers.html" import render_field %}
+
+    <form method="POST" action="">
+      <div class="form-group">
+        {{render_field(form.studentUsername, class_="form-control")}}
+      </div>
+      <label>
+        Enter the Book name to be returned
+      </label>
+      <div class="form-group">
+      <select id = "book_name" name= "book_name" class=" form-control">
+      {% for book in books %}
+        <option>
+          {{book.bookName}}
+        </option>
+      {% endfor %}
+      </select>
+      </div>
+
+      
+        <input type="submit" class="btn btn-primary" value="Submit">
+        <a class="btn btn-primary" style="float: right;" href="/pay_fine"> Pay Fine </a>
+  
+    </form>
+
+
+  </div>
+ 
+
+
+{% endblock %}
