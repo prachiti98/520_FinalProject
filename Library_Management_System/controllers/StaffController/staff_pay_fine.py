@@ -13,7 +13,7 @@ class GetUsernameForm(Form):
     amountpaid = StringField("Username")
 
 @staff_pay_fine_blueprint.route('/pay_fine', methods=['GET', 'POST'])
-@is_logged_in
+@is_logged_in('staff')
 def pay_fine():
     form = GetUsernameForm(request.form)
     total_paid = 0
@@ -36,10 +36,10 @@ def pay_fine():
             fee_exist = 1
             if amountpaid:
                 if amountpaid>t['fine']:
-                    transaction.update_fine(0,t['transaction_id'])
+                    transaction.update_fine(t['transaction_id'],0)
                     amountpaid-=t['fine']
                 else:
-                    transaction.update_fine(t['fine']-amountpaid,t['transaction_id'])
+                    transaction.update_fine(t['transaction_id'],t['fine']-amountpaid)
                     amountpaid=0
         #Based on fine, display if there is any existing fine or not
         if fee_exist:

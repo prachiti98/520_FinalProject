@@ -11,12 +11,14 @@ def index():
     return render_template("home.html")
 
 # Check if user logged in
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('Unauthorized, please Login.', 'danger')
-            return redirect(url_for('login'))
-    return wrap
+def is_logged_in(role):
+    def decorator(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            if 'logged_in' in session and session['role'] == role:
+                return f(*args, **kwargs)
+            else:
+                flash(f'You need to login as a {role}', 'danger')
+                return redirect(url_for(f'{role}_login'))
+        return wrapped
+    return decorator

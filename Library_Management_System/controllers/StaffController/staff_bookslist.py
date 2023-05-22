@@ -3,12 +3,13 @@ from flask import Blueprint,current_app
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from functools import wraps
 from models.BookDAO import BookDAO
-
+from controllers.index import is_logged_in
 
 staff_bookslist_blueprint = Blueprint('staff_bookslist_blueprint', __name__)
 
 # Creating the Books list
 @staff_bookslist_blueprint.route('/staffbookslist')
+@is_logged_in('staff')
 def staffbookslist():
     #Getting Book data access object
     DAO = current_app.config['dao']

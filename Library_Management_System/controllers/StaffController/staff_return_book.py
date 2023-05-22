@@ -20,7 +20,7 @@ class ReturnForm(Form):
         "Student ID number", [validators.Length(min=1)])
 
 @staff_return_book_blueprint.route('/return_books', methods=['GET', 'POST'])
-@is_logged_in
+@is_logged_in('staff')
 def return_books():
     #Getting various data access objects
     DAO = current_app.config['dao']

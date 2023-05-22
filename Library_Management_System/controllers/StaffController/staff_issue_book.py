@@ -16,7 +16,7 @@ class IssueForm(Form):
     studentUsername = StringField("Student ID number", [validators.Length(min=1)])
 
 @staff_issue_book_blueprint.route('/issue_books/<string:bookName>', methods=['GET', 'POST'])
-@is_logged_in
+@is_logged_in('staff')
 def issue_books(bookName):
     DAO = current_app.config['dao']
     #Getting various data access objects

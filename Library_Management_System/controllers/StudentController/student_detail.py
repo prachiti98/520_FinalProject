@@ -12,7 +12,7 @@ from controllers.index import is_logged_in
 student_detail_blueprint = Blueprint('student_detail_blueprint', __name__)
 
 @student_detail_blueprint.route("/student_detail", methods=['GET', 'POST'])
-@is_logged_in
+@is_logged_in('student')
 def student_detail():
     # Create Cursor
     # cur = mysql.connection.cursor()

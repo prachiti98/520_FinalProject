@@ -10,7 +10,7 @@ staff_check_fine_blueprint = Blueprint('staff_check_fine', __name__)
 
     
 @staff_check_fine_blueprint.route('/check_fine', methods=['GET', 'POST'])
-@is_logged_in
+@is_logged_in('staff')
 def check_fine():
     #Getting Transaction data access object
     DAO = current_app.config['dao']

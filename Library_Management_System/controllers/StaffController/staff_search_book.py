@@ -13,7 +13,7 @@ staff_search_book_blueprint = Blueprint('staff_search_book_blueprint', __name__)
 
 # Creating the Books list
 @staff_search_book_blueprint.route('/search_book', methods=['POST'])
-@is_logged_in
+@is_logged_in('staff')
 def search_book():
     DAO = current_app.config['dao']
     book = BookDAO(DAO)

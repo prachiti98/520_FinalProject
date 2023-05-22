@@ -26,6 +26,7 @@ def stafflogin():
                 session['logged_in'] = True
                 session['staff_logged_in'] = True
                 session['staffUsername'] = staffUsername
+                session['role'] = 'staff'
                 # session['aadharNo'] = data['aadharNo']
                 flash('You have successfully logged in', 'success')
                 return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))

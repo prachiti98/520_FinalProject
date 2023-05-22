@@ -16,7 +16,7 @@ class AddBooksForm(Form):
     quantity = IntegerField("Enter the quantity to be added")
 
 @staff_add_book_blueprint.route('/add_books', methods=['GET', 'POST'])
-@is_logged_in
+@is_logged_in('staff')
 def add_books():
     #Getting Book data access object
     DAO = current_app.config['dao']
