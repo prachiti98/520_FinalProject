@@ -43,28 +43,29 @@ def return_books():
                 data,h = transaction.getBook(student_id,book_name)
                 if h > 0:
                     book_id = data[0]['book_id']
+                    transaction_id = data[0]['transaction_id']
                     #Set book as availble
                     book.set_availble(book_id)
-                    #Complete transaction
-                    transaction.update_transaction(student_id,book_id)
                     return_date,h = transaction.get_return_date(student_id,book_id)
                     data = return_date
-                    returndate = str(data[0]['returnDate'])
-                    current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
+                    return_date = str(data[0]['returnDate'])
+                    #current_time = datetime.datetime.strftime(datetime.datetime.now()+ datetime.timedelta(days=10),"%Y-%m-%d %H:%M:%S") 
+                    current_time = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S") 
+                    #Complete transaction
+                    transaction.update_transaction(student_id,book_id)
                     #Check if the current date is > return date. If it is then add fine.
-                    if current_time > returndate:
-                        returndate = time.strftime(returndate)
+                    if current_time > return_date:
+                        return_date = time.strftime(return_date)
                         datetimeFormat = '%Y-%m-%d %H:%M:%S'
-                        diff = datetime.datetime.strptime(current_time, datetimeFormat)\
-                - datetime.datetime.strptime(returndate, datetimeFormat)
+                        diff = datetime.datetime.strptime(current_time, datetimeFormat) - datetime.datetime.strptime(return_date, datetimeFormat)
+                        #Added the fine
                         amount_to_be_added_to_fine = (diff.days)*10
                         #Update the fine
-                        transaction.update_fine(student_id,amount_to_be_added_to_fine)
+                        transaction.update_fine(transaction_id,amount_to_be_added_to_fine)
                     else:
-                        returndate = time.strftime(returndate)
+                        return_date = time.strftime(return_date)
                         datetimeFormat = '%Y-%m-%d %H:%M:%S'
-                        diff = datetime.datetime.strptime(current_time, datetimeFormat)\
-                - datetime.datetime.strptime(returndate, datetimeFormat)
+                        diff = datetime.datetime.strptime(current_time, datetimeFormat) - datetime.datetime.strptime(return_date, datetimeFormat)
                     #Return the book after adding the fine
                     flash('Book Returned', 'success')
                     return redirect(url_for('staff_bookslist_blueprint.staffbookslist'))
