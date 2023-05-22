@@ -4,7 +4,7 @@ class BookDAO():
         self.db.table = "books"
 
     def getBooks(self):
-        result,h = self.db.query("SELECT bookName, sum(available) AS count FROM books GROUP BY bookName")
+        result,h = self.db.query("SELECT bookName, author, sum(available) AS count FROM books GROUP BY bookName, author ORDER BY count(bookName) DESC")
         return result,h
     
     def unavailable_books(self):
