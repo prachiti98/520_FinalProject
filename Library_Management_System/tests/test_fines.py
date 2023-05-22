@@ -2,6 +2,7 @@ from flask import Flask
 from flask.testing import FlaskClient
 from flask.wrappers import Response
 from flask import current_app
+from models.BookDAO import BookDAO
 from models.TransactionDAO import TransactionDAO
 
 def test_check_fine(client: FlaskClient, app: Flask):
@@ -51,8 +52,14 @@ def test_check_fine(client: FlaskClient, app: Flask):
         # Send a POST request to the add_books route
         response = client.post("/add_books", data=book_data)
         # Create an instance of TransactionDAO
+        
+        book_dao = BookDAO(current_app.config['dao'])
+        result,h = book_dao.get_issue_book(book_data['bookName'])
         transaction_dao = TransactionDAO(current_app.config['dao'])
-        transaction_dao.issue_book(student_data['studentUsername'], staff_data['staffUsername'], book_data['bookName'],1 )
+        book = result[0]
+        book_dao.issue_book(book)
+        transaction_dao.issue_book(student_data['studentUsername'], staff_data['staffUsername'], book_data['bookName'],book['book_id'] )
+       
         count, result =  transaction_dao.getFine(student_data['studentUsername'])
         transaction = result._rows[-1]
         transaction_dao.update_fine(transaction['transaction_id'], 10)
@@ -123,8 +130,13 @@ def test_pay_fine(client: FlaskClient, app: Flask):
         # Send a POST request to the add_books route
         response = client.post("/add_books", data=book_data)
         # Create an instance of TransactionDAO
+        book_dao = BookDAO(current_app.config['dao'])
+        result,h = book_dao.get_issue_book(book_data['bookName'])
         transaction_dao = TransactionDAO(current_app.config['dao'])
-        transaction_dao.issue_book(student_data['studentUsername'], staff_data['staffUsername'], book_data['bookName'],1 )
+        book = result[0]
+        book_dao.issue_book(book)
+        transaction_dao.issue_book(student_data['studentUsername'], staff_data['staffUsername'], book_data['bookName'],book['book_id'] )
+       
         count, result =  transaction_dao.getFine(student_data['studentUsername'])
         transaction = result._rows[-1]
         transaction_dao.update_fine(transaction['transaction_id'], 10)
