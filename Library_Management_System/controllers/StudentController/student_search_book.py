@@ -10,7 +10,7 @@ from controllers.index import is_logged_in
 student_search_book_blueprint = Blueprint('student_search_book_blueprint', __name__)
 
 # Creating the Books list
-@student_search_book_blueprint.route('/search_book', methods=['POST'])
+@student_search_book_blueprint.route('/student_search_book', methods=['POST'])
 @is_logged_in('student')
 def search_book():
     DAO = current_app.config['dao']
