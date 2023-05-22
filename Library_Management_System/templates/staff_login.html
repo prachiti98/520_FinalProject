@@ -17,6 +17,8 @@
 <body style="background-image: url('https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');">
   <div class="container">
     <h1 class="text-center">Staff Login</h1>
+    <br>
+
     <form method="POST" action="">
       <div class="form-group">
         <label for="staffUsername">Staff Username</label>
@@ -26,6 +28,8 @@
         <label for="password">Password</label>
         <input type="password" name="password" id="password" class="form-control" value="{{ request.form.password }}" style="width: 300px;" placeholder="Enter your password">
       </div>
+      <br>
+      
       <div class="text-center">
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>

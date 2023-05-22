@@ -18,7 +18,7 @@
 <body style="background-image: url('https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');">
   <div class="container">
     <h1>Staff Register</h1>
-
+    <br>
     {% from "includes/_formhelpers.html" import render_field %}
 
     <form method="POST" action="">
@@ -34,7 +34,8 @@
       <div class="form-group">
         {{ render_field(form.confirm, class_="form-control") }}
       </div>
-      <p>
+      <br>
+      <p style="text-align: center;">
         <input type="submit" class="btn btn-primary" value="Submit">
       </p>
     </form>

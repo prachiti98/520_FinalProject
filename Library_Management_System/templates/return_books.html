@@ -9,6 +9,13 @@
     background-repeat: no-repeat;
   }
 
+  .container-return {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   .bg {
     width: 500px;
     margin: 0 auto;
@@ -35,8 +42,8 @@
   }
 
 </style>
-  <div >
-    <h1>Return Books</h1>
+  <div class="container-return">
+    <h1 style="text-align: center;">Return Books</h1>
 
     {% from "includes/_formhelpers.html" import render_field %}
 
