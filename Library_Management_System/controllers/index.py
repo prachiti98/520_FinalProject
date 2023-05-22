@@ -19,6 +19,6 @@ def is_logged_in(role):
                 return f(*args, **kwargs)
             else:
                 flash(f'You need to login as a {role}', 'danger')
-                return redirect(url_for(f'{role}_login'))
+                return redirect('/')
         return wrapped
     return decorator
