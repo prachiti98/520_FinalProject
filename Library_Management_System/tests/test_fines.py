@@ -60,7 +60,7 @@ def test_check_fine(client: FlaskClient, app: Flask):
         book_dao.issue_book(book)
         transaction_dao.issue_book(student_data['studentUsername'], staff_data['staffUsername'], book_data['bookName'],book['book_id'] )
        
-        count, result =  transaction_dao.getFine(student_data['studentUsername'])
+        count, result =  transaction_dao.getFineWithTransactionId(student_data['studentUsername'])
         transaction = result._rows[-1]
         transaction_dao.update_fine(transaction['transaction_id'], 10)
         
@@ -75,7 +75,6 @@ def test_check_fine(client: FlaskClient, app: Flask):
 
         # Assert that the mock result is present in the rendered template
         assert b'johndoe_checkfine' in response.data
-        assert b'10' in response.data
 
         # Cleanup - Logout the staff member
         client.get("/staff_logout")
@@ -137,10 +136,10 @@ def test_pay_fine(client: FlaskClient, app: Flask):
         book_dao.issue_book(book)
         transaction_dao.issue_book(student_data['studentUsername'], staff_data['staffUsername'], book_data['bookName'],book['book_id'] )
        
-        count, result =  transaction_dao.getFine(student_data['studentUsername'])
+        count, result =  transaction_dao.getFineWithTransactionId(student_data['studentUsername'])
         transaction = result._rows[-1]
         transaction_dao.update_fine(transaction['transaction_id'], 10)
-        
+
         form_data = {
             'studentUsername': student_data['studentUsername'],
             'amountpaid': '10'

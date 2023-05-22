@@ -11,6 +11,10 @@ class TransactionDAO():
 		result,h = self.db.query("SELECT SUM(fine) AS fine FROM transactions WHERE studentUsername = '{}' GROUP BY studentUsername".format(studentUsername))
 		return result,h
 	
+	def getFineWithTransactionId(self,studentUsername):
+		result,h = self.db.query("SELECT transaction_id, fine FROM transactions WHERE studentUsername = '{}'".format(studentUsername))
+		return result,h
+	
 	def getBook(self,student_id,book_name):
 		result,h = self.db.query_data("SELECT transaction_id,book_id FROM transactions WHERE studentUsername= '"+str(student_id)+"' AND bookName= '"+str(book_name)+"' AND Done IS NULL")
 		return result,h
