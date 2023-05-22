@@ -23,6 +23,7 @@ app = Flask(__name__)
 DAO = DBDAO(app)
 
 app.config['dao'] = DAO
+app.secret_key = "secret123"
 
 #Registering Students
 app.register_blueprint(index_blueprint)
